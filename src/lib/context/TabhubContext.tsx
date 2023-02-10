@@ -18,7 +18,6 @@ import { Collection } from "@/utils/interfaces/Collection";
 interface AuthContextType {
     user?: User;
     tokens?: AuthToken;
-    currentContextCollection?: Collection
     loading: boolean;
     error?: any;
     login: (objCredential: LoginProps) => void;
@@ -40,7 +39,6 @@ export function AuthProvider({
     let token = localStorageToken != null && JSON.parse(localStorageToken)
     const [user, setUser] = useState<User | undefined>();
     const [tokens, setTokens] = useState<AuthToken | undefined>(token);
-    const [currentContextCollection, setCurrentContextCollection] = useState<Collection | undefined>(undefined);
     const [error, setError] = useState<any>();
     const [loading, setLoading] = useState<boolean>(false);
     const [loadingInitial, setLoadingInitial] = useState<boolean>(false);
@@ -137,8 +135,6 @@ export function AuthProvider({
             login,
             // signUp,
             logout,
-            currentContextCollection,
-            setCurrentContextCollection
         }),
         [user, loading, error]
     );

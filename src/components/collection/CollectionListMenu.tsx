@@ -8,16 +8,12 @@ import {
 import type { MenuProps } from 'antd'
 import { Collection } from "@/utils/interfaces/Collection";
 import { useCollection } from '@/lib/hooks/collectionHook'
-import useTabhubContext from "@/lib/context/TabhubContext";
-// import { useStore } from "@nanostores/react";
-// import { tryDelete, tryGet, userCollection } from "@/stores/collection";
-// import { currentContextCollection, openModalCollectionForm, setCurrentContextCollection } from '@/stores/app'
-// import type { Collection } from "@/utils/interfaces/collection";
+import useCollectionContext from "@/lib/context/CollectionContext";
 
 export const CollectionListMenu: React.FC = ({ }) => {
     const [isMounted, setIsMounted] = useState(false);
     const { collectionList, isLoading, getCollectionList, deleteCollection } = useCollection();
-    const { currentContextCollection, setCurrentContextCollection } = useTabhubContext()
+    const { currentContextCollection, setCurrentContextCollection } = useCollectionContext()
 
 
     const items: MenuProps["items"] = [

@@ -1,30 +1,33 @@
-import { closeModalCollectionForm, currentContextCollection, isModalCollectionFormOpen } from "@/stores/app";
+// import { closeModalCollectionForm, currentContextCollection, isModalCollectionFormOpen } from "@/stores/app";
 import { Modal, Form } from "antd";
-import { useStore } from '@nanostores/react';
-import { CollectionForm } from "@components/collection/CollectionForm";
+// import { useStore } from '@nanostores/react';
+// import { CollectionForm } from "@components/collection/CollectionForm";
+import useCollectionContext from "@/lib/context/CollectionContext";
+
 import { useEffect } from "react";
 
 export const CollectionModalForm: React.FC = () => {
-    const _isModalCollectionFormOpen = useStore(isModalCollectionFormOpen)
-    const _currentContextCollection = useStore(currentContextCollection)
+    const { currentContextCollection, setCurrentContextCollection, isModalCollectionFormOpen, setIsModalCollectionFormOpen } = useCollectionContext()
+    // const _isModalCollectionFormOpen = useStore(isModalCollectionFormOpen)
+    // const _currentContextCollection = useStore(currentContextCollection)
     const [form] = Form.useForm();
 
     useEffect(() => {
-        _currentContextCollection != null &&
-            form.setFieldsValue(_currentContextCollection)
-    }, [form, _currentContextCollection]);
+        currentContextCollection != null &&
+            form.setFieldsValue(currentContextCollection)
+    }, [form, currentContextCollection]);
 
     const handleCancel = () => {
         //TODO: Loading Effect on Button
         form.resetFields();
-        closeModalCollectionForm();
+        setIsModalCollectionFormOpen(false);
     }
     return (<Modal
-        title={_currentContextCollection ? "Modifier une collection" : "Créer une collection"}
-        open={_isModalCollectionFormOpen}
+        title={currentContextCollection ? "Modifier une collection" : "Créer une collection"}
+        open={isModalCollectionFormOpen}
         onOk={form.submit}
         onCancel={handleCancel}
     >
-        <CollectionForm form={form} submitCallback={closeModalCollectionForm} />
+        {/* <CollectionForm form={form} submitCallback={currentContextCollection} /> */}
     </Modal >)
 }
