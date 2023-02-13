@@ -4,6 +4,7 @@ import * as collectionService from "@/lib/services/collectionService";
 
 export function useCollection() {
 	const [collectionList, setCollectionList] = useState<Collection[]>([]);
+	const [collection, setCollection] = useState<Collection | null>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const getCollectionList = () => {
@@ -11,7 +12,17 @@ export function useCollection() {
 		collectionService
 			.getCollectionList()
 			.then((collections) => setCollectionList(collections))
-			.catch((_error) => {})
+			.catch((_error) => { })
+			.finally(() => setIsLoading(false));
+	};
+
+
+	const getCollection = (collectionId: number) => {
+		setIsLoading(true);
+		collectionService
+			.getCollection(collectionId)
+			.then((collections) => setCollection(collections))
+			.catch((_error) => { })
 			.finally(() => setIsLoading(false));
 	};
 
@@ -20,7 +31,7 @@ export function useCollection() {
 		collectionService
 			.createCollection(collectionData)
 			.then((collection) => setCollectionList([...collectionList, collectionData]))
-			.catch((_error) => {})
+			.catch((_error) => { })
 			.finally(() => setIsLoading(false));
 	};
 
@@ -37,7 +48,7 @@ export function useCollection() {
 				setCollectionList(updatedCollection);
 				return;
 			})
-			.catch((_error) => {})
+			.catch((_error) => { })
 			.finally(() => setIsLoading(true));
 	};
 
@@ -46,9 +57,9 @@ export function useCollection() {
 		collectionService
 			.deleteCollection(collectionId)
 			.then((collections) => setCollectionList(collectionList.filter((collection: Collection) => collection.id !== collectionId)))
-			.catch((_error) => {})
+			.catch((_error) => { })
 			.finally(() => setIsLoading(false));
 	};
 
-	return { collectionList, getCollectionList, deleteCollection, createCollection, updateCollection, isLoading };
+	return { collectionList, getCollectionList, collection, getCollection, deleteCollection, createCollection, updateCollection, isLoading };
 }

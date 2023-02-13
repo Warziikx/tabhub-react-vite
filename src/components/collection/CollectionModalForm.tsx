@@ -7,33 +7,33 @@ import useCollectionContext from "@/lib/context/CollectionContext";
 import { useEffect } from "react";
 
 export const CollectionModalForm: React.FC = () => {
-	const { currentContextCollection, setCurrentContextCollection, isModalCollectionFormOpen, setIsModalCollectionFormOpen } = useCollectionContext();
+	const { currentContextCollection, setCurrentContextCollection, isModalCollectionFormOpen, setIsModalCollectionFormOpen } = useCollectionContext()
 	// const _isModalCollectionFormOpen = useStore(isModalCollectionFormOpen)
 	// const _currentContextCollection = useStore(currentContextCollection)
 	const [form] = Form.useForm();
 
 	useEffect(() => {
-		currentContextCollection != null && form.setFieldsValue(currentContextCollection);
+		currentContextCollection != null &&
+			form.setFieldsValue(currentContextCollection)
 	}, [form, currentContextCollection]);
 
 	const onSubmit = () => {
 		form.resetFields();
-		setIsModalCollectionFormOpen(false);
 		setCurrentContextCollection(null);
+		setIsModalCollectionFormOpen(false);
 	};
 
 	const handleCancel = () => {
 		//TODO: Loading Effect on Button
 		form.resetFields();
 		setIsModalCollectionFormOpen(false);
-		setCurrentContextCollection(null);
-	};
-	return (
-		<Modal title={currentContextCollection ? "Modifier une collection" : "Créer une collection"} 
-		open={isModalCollectionFormOpen} 
-		onOk={form.submit} 
-		onCancel={handleCancel}>
-			<CollectionForm form={form} submitCallback={onSubmit} />
-		</Modal>
-	);
-};
+	}
+	return (<Modal
+		title={currentContextCollection ? "Modifier une collection" : "Créer une collection"}
+		open={isModalCollectionFormOpen}
+		onOk={form.submit}
+		onCancel={handleCancel}
+	>
+		<CollectionForm form={form} submitCallback={onSubmit} />
+	</Modal >)
+}

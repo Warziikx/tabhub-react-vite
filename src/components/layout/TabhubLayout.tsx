@@ -16,9 +16,7 @@ export const TabHubLayout: React.FC = () => {
 	const { setIsModalCollectionFormOpen, setIsModalBookmarkFormOpen } = useCollectionContext();
 	const { user, logout } = useTabhubContext();
 	const [collapsed, setCollapsed] = useState(false);
-	const {
-		token: { colorBgContainer },
-	} = theme.useToken();
+	const { token: { colorBgContainer } } = theme.useToken();
 
 	const items: MenuProps["items"] = [
 		{

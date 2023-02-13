@@ -38,7 +38,7 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
 		userService
 			.getMe()
 			.then((user) => setUser(user))
-			.catch((_error) => {})
+			.catch((_error) => { })
 			.finally(() => setLoadingInitial(false));
 	}, []);
 
@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
 		userService
 			.getMe()
 			.then((user) => setUser(user))
-			.catch((_error) => {})
+			.catch((_error) => { })
 			.finally(() => setLoading(false));
 	}
 

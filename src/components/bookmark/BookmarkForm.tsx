@@ -1,6 +1,10 @@
 //import { tryCreate, tryUpdate } from '@/stores/bookmark';
-import { useBookmark } from "@/lib/hooks/bookmarkHook";
+
 import { Form, FormInstance, Input } from "antd";
+import { useEffect } from "react";
+
+import { useBookmark } from "@/lib/hooks/bookmarkHook";
+import useCollectionContext from "@/lib/context/CollectionContext";
 
 interface BookmarkFormProps {
 	form: FormInstance;
@@ -8,15 +12,16 @@ interface BookmarkFormProps {
 }
 
 export const BookmarkForm: React.FC<BookmarkFormProps> = ({ form, submitCallback }) => {
+	const { currentContextBookmark } = useCollectionContext();
 	const { createBookmark, updateBookmark } = useBookmark();
+	const linkValue = Form.useWatch('link', form);
+
 	const onSubmit = async (data: any) => {
-		console.log(data);
 		if (data.id === undefined) await createBookmark(data);
-		// else await updateBookmark(data);
+		else await updateBookmark(data);
 		form.resetFields();
 		submitCallback();
 	};
-
 	return (
 		<Form
 			form={form}
@@ -25,15 +30,22 @@ export const BookmarkForm: React.FC<BookmarkFormProps> = ({ form, submitCallback
 			style={{ maxWidth: 600 }}
 			initialValues={{ remember: true }}
 			onFinish={onSubmit}
-			onFinishFailed={(errorInfo) => {
-				console.log(errorInfo);
-			}}
+			onFinishFailed={(errorInfo) => { console.log(errorInfo); }}
 			autoComplete="off"
 		>
 			<Form.Item hidden={true} name="id"></Form.Item>
-			<Form.Item label="Lien" name="link" rules={[{ required: true, message: "Veuillez saisir un lien pour votre bookmark" }]}>
+			<Form.Item hidden={true} name="collectionId"></Form.Item>
+			<Form.Item label="Lien" name="link" rules={[{ required: true, type: "url", message: "Veuillez saisir un lien pour votre bookmark" }]}>
 				<Input placeholder="https://" />
 			</Form.Item>
+			{
+				currentContextBookmark &&
+				<>
+					<Form.Item label="Title" name="title" rules={[{ required: true, message: "Veuillez saisir un titre pour votre bookmark" }]}>
+						<Input />
+					</Form.Item>
+				</>
+			}
 		</Form>
 	);
 };

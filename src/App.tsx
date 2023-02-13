@@ -5,13 +5,21 @@ import "@/utils/axiosInterceptor";
 import "antd/dist/reset.css";
 import "./App.css";
 
+/* PAGES */
 import { Accueil } from "@/pages/Accueil";
+import { Collection } from '@/pages/Collection'
 import { Login } from "@/pages/auth/Login";
+
+/* UTILS */
 import { APP_ROUTES } from "@/utils/constant";
-import useTabhubContext, { AuthProvider } from "@/lib/context/TabhubContext";
 import ProtectedRoute, { ProtectedRouteProps } from "@/utils/ProtectedRoute";
-import { TabHubLayout } from "./components/layout/TabhubLayout";
-import { CollectionProvider } from "./lib/context/CollectionContext";
+
+/* CONTEXT */
+import useTabhubContext, { AuthProvider } from "@/lib/context/TabhubContext";
+import { CollectionProvider } from "@/lib/context/CollectionContext";
+
+/* COMPONENTS */
+import { TabHubLayout } from "@/components/layout/TabhubLayout";
 
 function Router() {
 	const { tokens } = useTabhubContext();
@@ -36,6 +44,7 @@ function Router() {
 				}
 			>
 				<Route index element={<Accueil />} />
+				<Route path="collection/:collectionId" element={<Collection />} />
 			</Route>
 
 			<Route

@@ -1,10 +1,19 @@
+import { useEffect } from "react";
 import { Form, Modal } from "antd";
+
 import useCollectionContext from "@/lib/context/CollectionContext";
 import { BookmarkForm } from "./BookmarkForm";
 
+
 export const BookmarkModalForm: React.FC = () => {
-	const { isModalBookmarkFormOpen, setIsModalBookmarkFormOpen } = useCollectionContext();
+	const { isModalBookmarkFormOpen, setIsModalBookmarkFormOpen, currentCollection } = useCollectionContext();
 	const [form] = Form.useForm();
+
+
+	useEffect(() => {
+		//currentCollection != null && form.setFieldsValue(currentCollection);
+		currentCollection != null && form.setFieldValue('collectionId', currentCollection.id)
+	}, [form, currentCollection]);
 
 	const onSubmit = () => {
 		form.resetFields();
@@ -13,7 +22,7 @@ export const BookmarkModalForm: React.FC = () => {
 
 	const handleCancel = () => {
 		//TODO: Loading Effect on Button
-		//form.resetFields();
+		form.resetFields();
 		setIsModalBookmarkFormOpen(false);
 	};
 
