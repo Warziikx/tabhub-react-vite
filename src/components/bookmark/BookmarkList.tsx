@@ -1,8 +1,7 @@
-import { Dropdown, List, MenuProps, Typography } from "antd"
+import { Button, Card, Dropdown, Empty, List, MenuProps, Radio, Space, Typography } from "antd"
 import styled from 'styled-components';
-import { blue } from '@ant-design/colors';
 
-import { Bookmark } from "@/utils/interfaces/Bookmark"
+import { Bookmark, BookmarkViewMode } from "@/utils/interfaces/Bookmark"
 import { Collection } from "@/utils/interfaces/Collection";
 
 import useCollectionContext from "@/lib/context/CollectionContext";
@@ -10,6 +9,10 @@ import useCollectionContext from "@/lib/context/CollectionContext";
 /* DAYJS */
 import dayjs from "dayjs";
 import 'dayjs/locale/fr'
+import { useBookmark } from "@/lib/hooks/bookmarkHook";
+import { PlusOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import { BookmarkListConfigButton } from "./BookmarkListConfigButton";
+import { useState } from "react";
 dayjs.locale('fr')
 
 interface BookmarkListProps {
@@ -29,13 +32,21 @@ const StyledListItem = styled(List.Item)`
 
 
 export const BookmarkList: React.FC<BookmarkListProps> = ({ bookmarks, collection }) => {
-    const { currentContextBookmark, setCurrentContextBookmark, setIsDrawerBookmarkFormOpen } = useCollectionContext();
+    const { currentContextBookmark, setCurrentContextBookmark, setIsDrawerBookmarkFormOpen, setIsModalBookmarkFormOpen } = useCollectionContext();
+    const [viewMode, setViewMode] = useState<BookmarkViewMode>(BookmarkViewMode.LISTE);
+
+    const { deleteBookmark } = useBookmark()
+
     const items: MenuProps["items"] = [
         {
             key: "1",
             label: "Ouvrir dans un nouvel onglet",
             onClick: () => {
-                currentContextBookmark && window.open(currentContextBookmark.link, "_blank")
+                if (currentContextBookmark) {
+                    const handle = window.open(currentContextBookmark.link);
+                    handle!.blur();
+                    window.focus();
+                }
             },
         },
         {
@@ -50,28 +61,55 @@ export const BookmarkList: React.FC<BookmarkListProps> = ({ bookmarks, collectio
             danger: true,
             label: "Supprimer",
             onClick: () => {
-                //if (currentContextCollection) deleteCollection(currentContextCollection.id);
+                currentContextBookmark && deleteBookmark(currentContextBookmark.id);
             },
         },
     ];
 
-    return (<List
-        header={<div><Typography.Title level={1}>{collection.name}</Typography.Title></div>}
-        dataSource={bookmarks}
-        renderItem={(item) => (
-            <Dropdown
-                menu={{ items }}
-                trigger={["contextMenu"]}
-                onOpenChange={(isOpen) => {
-                    if (isOpen) setCurrentContextBookmark(item);
-                    else setCurrentContextBookmark(null);
-                }}
+    return (
+        bookmarks.length > 0 ?
+            <List
+                header={
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <Typography.Title level={4}>{collection.icon} {collection.name}</Typography.Title>
+                        <Space>
+                            <BookmarkListConfigButton viewMode={viewMode} setViewMode={setViewMode} />
+                            <Button onClick={() => setIsModalBookmarkFormOpen(true)} icon={<PlusOutlined />} />
+                        </Space>
+                    </div >
+                }
+                grid={
+                    viewMode == BookmarkViewMode.CARD ?
+                        { gutter: 16, xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 3, } : undefined
+                }
+                dataSource={bookmarks}
+                renderItem={(item: Bookmark) => (
+                    <Dropdown
+                        menu={{ items }}
+                        trigger={["contextMenu"]}
+                        onOpenChange={(isOpen) => {
+                            if (isOpen) setCurrentContextBookmark(item);
+                            else setCurrentContextBookmark(null);
+                        }}
+                    >
+                        {
+                            viewMode == BookmarkViewMode.CARD ?
+                                <List.Item><Card title={item.title}><Typography.Paragraph >{item.description}</Typography.Paragraph></Card></List.Item> :
+                                <StyledListItem
+                                    onClick={() => { window.open(item.link, '_self') }}
+                                    onMouseDown={(event: any) => { if (event.button === 1) { window.open(item.link, '_blank') } }}
+                                    style={{ cursor: "pointer", }}
+                                >
+                                    <List.Item.Meta title={item.title} description={item.description} />
+                                    <Typography.Text>{dayjs(item.createdAt).format('DD MMMM YY')}</Typography.Text>
+                                </StyledListItem>
+                        }
+                    </Dropdown>
+                )}
+            /> : <Empty
+                description={< span > Pas encore de bookmark ?</span >}
             >
-                <StyledListItem onClick={() => { window.open(item.link, '_self') }} style={{ cursor: "pointer", }}>
-                    <Typography.Title level={4}>{item.title}</Typography.Title>
-                    <Typography.Text>{dayjs(item.createdAt).format('DD MMMM YY')}</Typography.Text>
-                </StyledListItem>
-            </Dropdown>
-        )}
-    />)
+                <Button type="primary" onClick={() => setIsModalBookmarkFormOpen(true)}>Creer maintenant</Button>
+            </Empty >
+    )
 }

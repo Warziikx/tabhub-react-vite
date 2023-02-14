@@ -1,19 +1,20 @@
 import { Dropdown, Menu, Skeleton } from "antd";
 import { useEffect, useState } from "react";
 
-import { WindowsOutlined, HomeOutlined } from "@ant-design/icons";
+import { WindowsOutlined, HomeOutlined, PlusOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Collection } from "@/utils/interfaces/Collection";
 import { useCollection } from "@/lib/hooks/collectionHook";
 import useCollectionContext from "@/lib/context/CollectionContext";
-import { useNavigate } from "react-router-dom";
-import { APP_ROUTES } from "@/utils/constant";
+import { useNavigate, useParams } from "react-router-dom";
+import { APP_ROUTES, HOME_PAGE_KEY } from "@/utils/constant";
 
 export const CollectionListMenu: React.FC = ({ }) => {
 	const navigate = useNavigate();
+	let { collectionId } = useParams();
 	const [isMounted, setIsMounted] = useState(false);
-	const { collectionList, isLoading, getCollectionList, deleteCollection, updateCollection } = useCollection();
-	const { currentContextCollection, setCurrentContextCollection, setIsModalCollectionFormOpen, setCurrentCollection } = useCollectionContext();
+	const { isLoading, getCollectionList, deleteCollection } = useCollection();
+	const { collectionList, currentContextCollection, setCurrentContextCollection, setIsModalCollectionFormOpen } = useCollectionContext();
 
 	const items: MenuProps["items"] = [
 		{
@@ -42,23 +43,25 @@ export const CollectionListMenu: React.FC = ({ }) => {
 
 	const formatuseCollectionToMenuItems = () => {
 		return [
-			{ key: "Accueil", label: "Accueil", icon: <HomeOutlined /> },
+			{
+				key: HOME_PAGE_KEY, label: "Accueil", icon: <HomeOutlined />, onClick: () => {
+					navigate(APP_ROUTES.HOME)
+				}
+			},
 			{
 				key: "Collection",
 				label: "Collection",
 				type: "group",
 				icon: <WindowsOutlined />,
-				children: isLoading
-					? [1, 2, 3, 4].map((index) => ({
+				children: isLoading ?
+					[1, 2, 3, 4].map((index) => ({
 						key: index,
 						label: <Skeleton.Input size="large" block={true} active />,
-					}))
-					: collectionList.map((collection: Collection, index: number) => ({
-						key: index,
-						onClick: () => {
-							setCurrentCollection(collection);
-							navigate(`${APP_ROUTES.COLLECTION}${collection.id}`);
-						},
+					})) :
+					[...collectionList.map((collection: Collection, index: number) => ({
+						key: `${collection.id}`,
+						icon: <div>{collection.icon}</div>,
+						onClick: () => { navigate(`${APP_ROUTES.COLLECTION}${collection.id}`) },
 						label: (
 							<Dropdown
 								menu={{ items }}
@@ -71,10 +74,14 @@ export const CollectionListMenu: React.FC = ({ }) => {
 								<div>{collection.name}</div>
 							</Dropdown>
 						),
-					})),
+					})), { key: "Create", label: "Ajouter une collecton", icon: <PlusOutlined />, onClick: () => { setIsModalCollectionFormOpen(true); } }]
 			},
 		];
 	};
-
-	return <Menu style={{ padding: 8 }} mode="inline" defaultSelectedKeys={["Accueil"]} items={formatuseCollectionToMenuItems()} />;
+	return <Menu
+		style={{ padding: 8 }}
+		mode="inline"
+		defaultSelectedKeys={[HOME_PAGE_KEY]}
+		selectedKeys={[collectionId != null ? `${collectionId}` : HOME_PAGE_KEY]}
+		items={formatuseCollectionToMenuItems()} />;
 };

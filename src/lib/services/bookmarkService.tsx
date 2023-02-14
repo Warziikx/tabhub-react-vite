@@ -18,7 +18,7 @@ export async function updateBookmark(bookmarkId: number, bookmarkData: Bookmark)
 	return reponse.data.data;
 }
 
-// export async function deleteBookmark(bookmarkId: number): Promise<Bookmark> {
-// 	const reponse = await axios.delete(`${API_ROUTES.COLLECTION_DELETE}/${bookmarkId}`);
-// 	return reponse.data.data;
-// }
+export async function deleteBookmark(bookmarkId: number): Promise<Bookmark> {
+	const reponse = await axios.delete(`${API_ROUTES.BOOKMARK_DELETE}/${bookmarkId}`);
+	return reponse.data.data;
+}

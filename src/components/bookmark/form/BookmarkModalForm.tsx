@@ -6,14 +6,14 @@ import { BookmarkForm } from "./BookmarkForm";
 
 
 export const BookmarkModalForm: React.FC = () => {
-	const { isModalBookmarkFormOpen, setIsModalBookmarkFormOpen, currentCollection } = useCollectionContext();
+	const { isModalBookmarkFormOpen, setIsModalBookmarkFormOpen, collection } = useCollectionContext();
 	const [form] = Form.useForm();
 
 
 	useEffect(() => {
 		//currentCollection != null && form.setFieldsValue(currentCollection);
-		currentCollection != null && form.setFieldValue('collectionId', currentCollection.id)
-	}, [form, currentCollection]);
+		collection != null && form.setFieldValue('collectionId', collection.id)
+	}, [form, collection]);
 
 	const onSubmit = () => {
 		form.resetFields();

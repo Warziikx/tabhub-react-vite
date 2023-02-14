@@ -5,11 +5,13 @@ import { Bookmark } from "@/utils/interfaces/Bookmark";
 
 interface CollectionContextType {
 	/* COLLECTION RELATED */
-	currentCollection: Collection | null;
+	collection: Collection | null;
+	collectionList: Array<Collection>
 	currentContextCollection?: Collection | null;
 	isModalCollectionFormOpen: boolean;
+	setCollection: (collection: Collection | null) => void;
+	setCollectionList: (collectionList: Array<Collection>) => void
 	setCurrentContextCollection: (collection: Collection | null) => void;
-	setCurrentCollection: (collection: Collection | null) => void;
 	setIsModalCollectionFormOpen: (value: boolean) => void;
 
 	/* BOOKMARK RELATED */
@@ -28,7 +30,8 @@ const CollectionContext = createContext<CollectionContextType>({} as CollectionC
 // Export the provider as we need to wrap the entire app with it
 export function CollectionProvider({ children }: { children: ReactNode }): JSX.Element {
 	/* COLLECTION RELATED */
-	const [currentCollection, setCurrentCollection] = useState<Collection | null>(null);
+	const [collection, setCollection] = useState<Collection | null>(null);
+	const [collectionList, setCollectionList] = useState<Array<Collection>>([]);
 	const [currentContextCollection, setCurrentContextCollection] = useState<Collection | null>(null);
 	const [isModalCollectionFormOpen, setIsModalCollectionFormOpen] = useState<boolean>(false);
 
@@ -39,22 +42,23 @@ export function CollectionProvider({ children }: { children: ReactNode }): JSX.E
 
 	const memoedValue = useMemo(
 		() => ({
-			currentCollection,
-			currentContextCollection,
-			currentContextBookmark,
-			isModalCollectionFormOpen,
-			isModalBookmarkFormOpen,
-			isDrawerBookmarkFormOpen,
-			setCurrentCollection,
-			setCurrentContextBookmark,
-			setCurrentContextCollection,
-			setIsModalCollectionFormOpen,
-			setIsModalBookmarkFormOpen,
-			setIsDrawerBookmarkFormOpen
+			/* COLLECTION RELATED */
+			collection, setCollection,
+			collectionList, setCollectionList,
+			currentContextCollection, setCurrentContextCollection,
+			isModalCollectionFormOpen, setIsModalCollectionFormOpen,
+
+			/* BOOKMARK RELATED */
+			currentContextBookmark, setCurrentContextBookmark,
+			isModalBookmarkFormOpen, setIsModalBookmarkFormOpen,
+			isDrawerBookmarkFormOpen, setIsDrawerBookmarkFormOpen,
+
 		}),
 		[
-			isModalCollectionFormOpen,
+			collection,
+			collectionList,
 			currentContextCollection,
+			isModalCollectionFormOpen,
 			isModalBookmarkFormOpen,
 			isDrawerBookmarkFormOpen,
 			currentContextBookmark

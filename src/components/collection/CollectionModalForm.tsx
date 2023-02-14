@@ -7,15 +7,19 @@ import useCollectionContext from "@/lib/context/CollectionContext";
 import { useEffect } from "react";
 
 export const CollectionModalForm: React.FC = () => {
-	const { currentContextCollection, setCurrentContextCollection, isModalCollectionFormOpen, setIsModalCollectionFormOpen } = useCollectionContext()
-	// const _isModalCollectionFormOpen = useStore(isModalCollectionFormOpen)
-	// const _currentContextCollection = useStore(currentContextCollection)
+	const {
+		currentContextCollection,
+		setCurrentContextCollection,
+		isModalCollectionFormOpen,
+		setIsModalCollectionFormOpen
+	} = useCollectionContext()
 	const [form] = Form.useForm();
 
 	useEffect(() => {
 		currentContextCollection != null &&
 			form.setFieldsValue(currentContextCollection)
-	}, [form, currentContextCollection]);
+		currentContextCollection == null && form.setFieldValue('icon', '📁')
+	}, [form, currentContextCollection, isModalCollectionFormOpen]);
 
 	const onSubmit = () => {
 		form.resetFields();
@@ -24,7 +28,7 @@ export const CollectionModalForm: React.FC = () => {
 	};
 
 	const handleCancel = () => {
-		//TODO: Loading Effect on Button
+
 		form.resetFields();
 		setIsModalCollectionFormOpen(false);
 	}

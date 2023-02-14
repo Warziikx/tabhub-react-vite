@@ -2,10 +2,13 @@ import { Collection } from "@/utils/interfaces/Collection";
 import { useState, useEffect } from "react";
 import * as collectionService from "@/lib/services/collectionService";
 
+
+import useCollectionContext from "@/lib/context/CollectionContext";
+
+
 export function useCollection() {
-	const [collectionList, setCollectionList] = useState<Collection[]>([]);
-	const [collection, setCollection] = useState<Collection | null>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const { collectionList, setCollectionList, collection, setCollection } = useCollectionContext();
 
 	const getCollectionList = () => {
 		setIsLoading(true);
@@ -26,11 +29,20 @@ export function useCollection() {
 			.finally(() => setIsLoading(false));
 	};
 
+	const getCollectionByType = (collectionType: string) => {
+		setIsLoading(true);
+		collectionService
+			.getCollectionByType(collectionType)
+			.then((collections) => setCollection(collections))
+			.catch((_error) => { })
+			.finally(() => setIsLoading(false));
+	};
+
 	const createCollection = (collectionData: Collection) => {
 		setIsLoading(true);
 		collectionService
 			.createCollection(collectionData)
-			.then((collection) => setCollectionList([...collectionList, collectionData]))
+			.then((collection) => setCollectionList([...collectionList, collection]))
 			.catch((_error) => { })
 			.finally(() => setIsLoading(false));
 	};
@@ -40,9 +52,9 @@ export function useCollection() {
 		const collectionId = collectionData.id;
 		collectionService
 			.updateCollection(collectionId, collectionData)
-			.then((collection) => {
+			.then((newCollection) => {
 				let updatedCollection = collectionList.map((collection: Collection) => {
-					if (collection.id == collectionData.id) return collectionData;
+					if (collection.id == newCollection.id) return newCollection;
 					else return collection;
 				});
 				setCollectionList(updatedCollection);
@@ -61,5 +73,5 @@ export function useCollection() {
 			.finally(() => setIsLoading(false));
 	};
 
-	return { collectionList, getCollectionList, collection, getCollection, deleteCollection, createCollection, updateCollection, isLoading };
+	return { collectionList, getCollectionList, collection, getCollection, getCollectionByType, deleteCollection, createCollection, updateCollection, isLoading };
 }

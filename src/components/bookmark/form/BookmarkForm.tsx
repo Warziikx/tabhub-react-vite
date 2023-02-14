@@ -39,10 +39,13 @@ export const BookmarkForm: React.FC<BookmarkFormProps> = ({ form, submitCallback
 				<Input placeholder="https://" />
 			</Form.Item>
 			{
-				currentContextBookmark &&
+				currentContextBookmark != null &&
 				<>
 					<Form.Item label="Title" name="title" rules={[{ required: true, message: "Veuillez saisir un titre pour votre bookmark" }]}>
 						<Input />
+					</Form.Item>
+					<Form.Item label="Description" name="description">
+						<Input.TextArea autoSize={true} />
 					</Form.Item>
 				</>
 			}

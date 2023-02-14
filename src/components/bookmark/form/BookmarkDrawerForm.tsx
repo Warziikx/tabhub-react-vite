@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Button, Drawer, Form, Space } from "antd";
 
-import { BookmarkForm } from "@/components/bookmark/BookmarkForm";
+import { BookmarkForm } from "@/components/bookmark/form/BookmarkForm";
 import useCollectionContext from "@/lib/context/CollectionContext";
 
 export const BookmarkDrawerForm: React.FC = () => {

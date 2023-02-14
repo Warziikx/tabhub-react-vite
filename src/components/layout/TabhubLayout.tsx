@@ -1,3 +1,6 @@
+import logo from '@/assets/logo.svg';
+import logoIcon from '@/assets/logo-icon.svg';
+
 import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, LogoutOutlined, PlusOutlined, BlockOutlined, LinkOutlined } from "@ant-design/icons";
@@ -8,12 +11,12 @@ import { CollectionListMenu } from "../collection/CollectionListMenu";
 import useTabhubContext from "@/lib/context/TabhubContext";
 import useCollectionContext from "@/lib/context/CollectionContext";
 import { CollectionModalForm } from "../collection/CollectionModalForm";
-import { BookmarkModalForm } from "../bookmark/BookmarkModalForm";
+import { BookmarkModalForm } from "../bookmark/form/BookmarkModalForm";
 
 const { Header, Content, Sider } = Layout;
 
 export const TabHubLayout: React.FC = () => {
-	const { setIsModalCollectionFormOpen, setIsModalBookmarkFormOpen } = useCollectionContext();
+	const { setIsModalCollectionFormOpen, setIsModalBookmarkFormOpen, setCurrentContextBookmark } = useCollectionContext();
 	const { user, logout } = useTabhubContext();
 	const [collapsed, setCollapsed] = useState(false);
 	const { token: { colorBgContainer } } = theme.useToken();
@@ -35,9 +38,9 @@ export const TabHubLayout: React.FC = () => {
 	return (
 		<Layout style={{ minHeight: "100vh" }}>
 			<Sider width={260} trigger={null} collapsible collapsed={collapsed} style={{ background: colorBgContainer }}>
-				<Typography.Title level={2} style={{ textAlign: "center", height: "64", verticalAlign: "middle" }}>
-					TabHub
-				</Typography.Title>
+				{collapsed ?
+					<img src={logoIcon} className="App-logo" alt="logo" height={64} style={{ width: '100%' }} /> :
+					<img src={logo} className="App-logo" alt="logo" height={64} style={{ width: '100%' }} />}
 				<CollectionListMenu />
 			</Sider>
 			<Layout className="site-layout">
@@ -66,7 +69,7 @@ export const TabHubLayout: React.FC = () => {
 				</Content>
 			</Layout>
 			<FloatButton.Group trigger="hover" type="primary" icon={<PlusOutlined />}>
-				<FloatButton icon={<LinkOutlined />} onClick={() => setIsModalBookmarkFormOpen(true)} tooltip={<div>Ajouter un lien</div>} />
+				<FloatButton icon={<LinkOutlined />} onClick={() => { setCurrentContextBookmark(null); setIsModalBookmarkFormOpen(true); }} tooltip={<div>Ajouter un lien</div>} />
 				<FloatButton icon={<BlockOutlined />} onClick={() => setIsModalCollectionFormOpen(true)} tooltip={<div>Ajouter une collection</div>} />
 			</FloatButton.Group>
 			<CollectionModalForm />
