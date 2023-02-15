@@ -36,15 +36,13 @@ axios.interceptors.response.use(
       res.data.message
     ) {
       //store.dispatch(messageActions.setGlobalMessage(res.data));
-      if (res.data && res.data.code && res.data.code == 40110) {
-        window.location.replace(APP_ROUTES.LOG_IN)
-
-      }
       return Promise.reject(res.data)
     }
 
     const originalRequest = error.config
     if (res && res.status === 401 && res.config && !originalRequest._retry) {
+      window.location.replace(APP_ROUTES.LOG_IN)
+      localStorage.removeItem('token')
       console.log('Hello j\'attend de recupe un nouveau token')
       // const refreshToken = store.getState().auth.refreshToken
       // originalRequest._retry = true

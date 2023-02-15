@@ -5,4 +5,5 @@ export interface Collection {
 	name: string;
 	icon: string;
 	bookmarks: Array<Bookmark>
+	children?: Array<Collection>
 }
