@@ -7,7 +7,7 @@ import "./App.css";
 
 /* PAGES */
 import { Accueil } from "@/pages/Accueil";
-import { Collection } from '@/pages/Collection'
+import { CollectionPage } from "@/pages/CollectionPage";
 import { Login } from "@/pages/auth/Login";
 
 /* UTILS */
@@ -44,7 +44,7 @@ function Router() {
 				}
 			>
 				<Route index element={<Accueil />} />
-				<Route path="collection/:collectionId" element={<Collection />} />
+				<Route path="collection/:collectionId" element={<CollectionPage />} />
 			</Route>
 
 			<Route

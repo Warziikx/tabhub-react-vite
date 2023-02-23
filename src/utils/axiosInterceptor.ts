@@ -42,7 +42,7 @@ axios.interceptors.response.use(
     const originalRequest = error.config
     if (res && res.status === 401 && res.config && !originalRequest._retry) {
       window.location.replace(APP_ROUTES.LOG_IN)
-      localStorage.removeItem('token')
+      localStorage.removeItem('tokens')
       console.log('Hello j\'attend de recupe un nouveau token')
       // const refreshToken = store.getState().auth.refreshToken
       // originalRequest._retry = true

@@ -41,7 +41,7 @@ export const CollectionListMenu: React.FC = ({ }) => {
 		}
 	}, [isMounted, setIsMounted, getCollectionList]);
 
-	const buildMenuItem = () => {
+	const formatuseCollectionToMenuItems = () => {
 		return [
 			{
 				key: HOME_PAGE_KEY, label: "Accueil", icon: <HomeOutlined />, onClick: () => {
@@ -58,35 +58,30 @@ export const CollectionListMenu: React.FC = ({ }) => {
 						key: index,
 						label: <Skeleton.Input size="large" block={true} active />,
 					})) :
-					[...formatCollectionToMenuItems(collectionList), { key: "Create", label: "Ajouter une collecton", icon: <PlusOutlined />, onClick: () => { setIsModalCollectionFormOpen(true); } }]
+					[...collectionList.map((collection: Collection, index: number) => ({
+						key: `${collection.id}`,
+						icon: <div>{collection.icon}</div>,
+						onClick: () => { navigate(`${APP_ROUTES.COLLECTION}${collection.id}`) },
+						label: (
+							<Dropdown
+								menu={{ items }}
+								trigger={["contextMenu"]}
+								onOpenChange={(isOpen) => {
+									if (isOpen) setCurrentContextCollection(collection);
+									else setCurrentContextCollection(null);
+								}}
+							>
+								<div>{collection.name}</div>
+							</Dropdown>
+						),
+					})), { key: "Create", label: "Ajouter une collecton", icon: <PlusOutlined />, onClick: () => { setIsModalCollectionFormOpen(true); } }]
 			},
 		];
 	};
-	const formatCollectionToMenuItems = (collections: Array<Collection>): MenuProps["items"] => {
-		return collections.map((collection: Collection, index: number) => ({
-			key: `${collection.id}`,
-			icon: <div>{collection.icon}</div>,
-			onClick: () => { navigate(`${APP_ROUTES.COLLECTION}${collection.id}`) },
-			label: (
-				<Dropdown
-					menu={{ items }}
-					trigger={["contextMenu"]}
-					onOpenChange={(isOpen) => {
-						if (isOpen) setCurrentContextCollection(collection);
-						else setCurrentContextCollection(null);
-					}}
-				>
-					<div>{collection.name}</div>
-				</Dropdown>
-			),
-			children: collection.children ? formatCollectionToMenuItems(collection.children) : undefined,
-		}))
-	}
-
 	return <Menu
 		style={{ padding: 8 }}
 		mode="inline"
 		defaultSelectedKeys={[HOME_PAGE_KEY]}
 		selectedKeys={[collectionId != null ? `${collectionId}` : HOME_PAGE_KEY]}
-		items={buildMenuItem()} />;
+		items={formatuseCollectionToMenuItems()} />;
 };

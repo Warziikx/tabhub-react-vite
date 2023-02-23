@@ -1,13 +1,14 @@
-import data from '@emoji-mart/data'
-import Picker from '@emoji-mart/react'
-import i18n from '@emoji-mart/data/i18n/fr.json'
-i18n.search_no_results_1 = 'Aucun emoji'
-
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
+import i18n from "@emoji-mart/data/i18n/fr.json";
+i18n.search_no_results_1 = "Aucun emoji";
 
 import { Button, Col, Form, FormInstance, Input, Popover, Row } from "antd";
 
 import { useCollection } from "@/lib/hooks/collectionHook";
-import { useEffect, useState } from 'react';
+import { APP_ROUTES } from "@/utils/constant";
+import { useNavigate } from "react-router-dom";
+import { Collection } from "@/utils/interfaces/Collection";
 
 interface CollectionFormProps {
 	form: FormInstance;
@@ -15,16 +16,22 @@ interface CollectionFormProps {
 }
 
 export const CollectionForm: React.FC<CollectionFormProps> = ({ form, submitCallback }) => {
+	const navigate = useNavigate();
 	const { createCollection, updateCollection } = useCollection();
-	const iconValue = Form.useWatch('icon', form);
+	const iconValue = Form.useWatch("icon", form);
 
 	const onSubmit = async (data: any) => {
-		if (data.id === undefined) await createCollection(data);
-		else await updateCollection(data);
+		let collection: Collection | undefined;
+		if (data.id === undefined) {
+			collection = await createCollection(data);
+		} else {
+			collection = await updateCollection(data);
+		}
+		console.log(collection);
 		form.resetFields();
 		submitCallback();
+		navigate(`${APP_ROUTES.COLLECTION}${collection?.id}`);
 	};
-
 
 	return (
 		<Form
@@ -42,12 +49,7 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({ form, submitCall
 			<Row gutter={4}>
 				<Col span={2}>
 					<Form.Item label="Icon" name="icon" rules={[{ required: true, message: "Veuillez choisir une icone pour votre collection" }]}>
-						<Popover
-							content={
-								<Picker data={data} i18n={i18n}
-									onEmojiSelect={(value: any) => form.setFieldValue('icon', `${value.native}`)} />
-							}
-						>
+						<Popover content={<Picker data={data} i18n={i18n} onEmojiSelect={(value: any) => form.setFieldValue("icon", `${value.native}`)} />}>
 							<Button icon={iconValue} />
 						</Popover>
 					</Form.Item>
@@ -58,6 +60,6 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({ form, submitCall
 					</Form.Item>
 				</Col>
 			</Row>
-		</Form >
+		</Form>
 	);
 };

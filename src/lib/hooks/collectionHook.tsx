@@ -2,9 +2,7 @@ import { Collection } from "@/utils/interfaces/Collection";
 import { useState, useEffect } from "react";
 import * as collectionService from "@/lib/services/collectionService";
 
-
 import useCollectionContext from "@/lib/context/CollectionContext";
-
 
 export function useCollection() {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -15,17 +13,16 @@ export function useCollection() {
 		collectionService
 			.getCollectionList()
 			.then((collections) => setCollectionList(collections))
-			.catch((_error) => { })
+			.catch((_error) => {})
 			.finally(() => setIsLoading(false));
 	};
-
 
 	const getCollection = (collectionId: number) => {
 		setIsLoading(true);
 		collectionService
 			.getCollection(collectionId)
 			.then((collections) => setCollection(collections))
-			.catch((_error) => { })
+			.catch((_error) => {})
 			.finally(() => setIsLoading(false));
 	};
 
@@ -34,34 +31,54 @@ export function useCollection() {
 		collectionService
 			.getCollectionByType(collectionType)
 			.then((collections) => setCollection(collections))
-			.catch((_error) => { })
+			.catch((_error) => {})
 			.finally(() => setIsLoading(false));
 	};
 
-	const createCollection = (collectionData: Collection) => {
-		setIsLoading(true);
-		collectionService
-			.createCollection(collectionData)
-			.then((collection) => setCollectionList([...collectionList, collection]))
-			.catch((_error) => { })
-			.finally(() => setIsLoading(false));
+	const createCollection = async (collectionData: Collection): Promise<Collection | undefined> => {
+		try {
+			setIsLoading(true);
+			let collection = await collectionService.createCollection(collectionData);
+			setCollectionList([...collectionList, collection]);
+			setIsLoading(false);
+			return collection;
+		} catch (err) {
+			setIsLoading(false);
+			console.log(err);
+		}
 	};
 
-	const updateCollection = (collectionData: Collection) => {
-		setIsLoading(true);
-		const collectionId = collectionData.id;
-		collectionService
-			.updateCollection(collectionId, collectionData)
-			.then((newCollection) => {
-				let updatedCollection = collectionList.map((collection: Collection) => {
-					if (collection.id == newCollection.id) return newCollection;
-					else return collection;
-				});
-				setCollectionList(updatedCollection);
-				return;
-			})
-			.catch((_error) => { })
-			.finally(() => setIsLoading(true));
+	const updateCollection = async (collectionData: Collection): Promise<Collection | undefined> => {
+		try {
+			setIsLoading(true);
+			const collectionId = collectionData.id;
+			let newCollection = await collectionService.updateCollection(collectionId, collectionData);
+			let updatedCollection = collectionList.map((collection: Collection) => {
+				if (collection.id == newCollection.id) return newCollection;
+				else return collection;
+			});
+			setCollectionList(updatedCollection);
+			setIsLoading(false);
+			return newCollection;
+		} catch (err) {
+			setIsLoading(false);
+			console.log(err);
+		}
+
+		// setIsLoading(true);
+		// const collectionId = collectionData.id;
+		// return collectionService
+		// 	.updateCollection(collectionId, collectionData)
+		// 	.then((newCollection) => {
+		// 		let updatedCollection = collectionList.map((collection: Collection) => {
+		// 			if (collection.id == newCollection.id) return newCollection;
+		// 			else return collection;
+		// 		});
+		// 		setCollectionList(updatedCollection);
+		// 		return;
+		// 	})
+		// 	.catch((_error) => {})
+		// 	.finally(() => setIsLoading(true));
 	};
 
 	const deleteCollection = (collectionId: number) => {
@@ -69,7 +86,7 @@ export function useCollection() {
 		collectionService
 			.deleteCollection(collectionId)
 			.then((collections) => setCollectionList(collectionList.filter((collection: Collection) => collection.id !== collectionId)))
-			.catch((_error) => { })
+			.catch((_error) => {})
 			.finally(() => setIsLoading(false));
 	};
 
