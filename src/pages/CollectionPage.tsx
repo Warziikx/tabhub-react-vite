@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Divider, List, Typography } from "antd";
+import { Breadcrumb, Divider, List, Typography } from "antd";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { Collection } from "@/utils/interfaces/Collection";
 
@@ -57,8 +57,36 @@ export const CollectionPage: React.FC = () => {
 		}
 	}, [isMounted, setIsMounted, getCollection, collectionId]);
 
+	const buildBreadcrumbItems = (collection: Collection, level: number): any => {
+		return <>
+			{collection.parent && buildBreadcrumbItems(collection.parent, level + 1)}
+			{level > 0 ? (
+				<Breadcrumb.Item href="#" onClick={() => { navigate(`${APP_ROUTES.COLLECTION}${collection?.id}`) }}>
+					{collection.icon}
+					<span style={{ marginLeft: 4 }}>{collection.name}</span>
+				</Breadcrumb.Item>) :
+				(<Breadcrumb.Item>
+					<span style={{ marginLeft: 4 }}>{collection.name}</span>
+				</Breadcrumb.Item>)
+			}
+		</>
+	}
+
 	return (
 		<div>
+			{collection && collection.parent && (
+				<div style={{ marginBottom: "30px" }}>
+					<Breadcrumb separator=">">
+						{buildBreadcrumbItems(collection, 0)}
+						{/* <Breadcrumb.Item href="#" onClick={() => { navigate(`${APP_ROUTES.COLLECTION}${collection.parent?.id}`) }}>
+							{collection.parent.icon}
+							<span style={{ marginLeft: 4 }}>{collection.parent.name}</span>
+						</Breadcrumb.Item>
+						<Breadcrumb.Item>
+							<span style={{ marginLeft: 4 }}>{collection.name}</span></Breadcrumb.Item> */}
+					</Breadcrumb>
+				</div>
+			)}
 			{collection && collection.children && collection.children?.length > 0 && (
 				<div style={{ marginBottom: "30px" }}>
 					<Typography.Title level={4}>Sous-Collection</Typography.Title>

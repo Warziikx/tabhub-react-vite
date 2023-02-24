@@ -13,7 +13,7 @@ export function useCollection() {
 		collectionService
 			.getCollectionList()
 			.then((collections) => setCollectionList(collections))
-			.catch((_error) => {})
+			.catch((_error) => { })
 			.finally(() => setIsLoading(false));
 	};
 
@@ -22,7 +22,7 @@ export function useCollection() {
 		collectionService
 			.getCollection(collectionId)
 			.then((collections) => setCollection(collections))
-			.catch((_error) => {})
+			.catch((_error) => { })
 			.finally(() => setIsLoading(false));
 	};
 
@@ -31,7 +31,7 @@ export function useCollection() {
 		collectionService
 			.getCollectionByType(collectionType)
 			.then((collections) => setCollection(collections))
-			.catch((_error) => {})
+			.catch((_error) => { })
 			.finally(() => setIsLoading(false));
 	};
 
@@ -39,7 +39,8 @@ export function useCollection() {
 		try {
 			setIsLoading(true);
 			let collection = await collectionService.createCollection(collectionData);
-			setCollectionList([...collectionList, collection]);
+			if (!collectionData.parentId)
+				setCollectionList([...collectionList, collection]);
 			setIsLoading(false);
 			return collection;
 		} catch (err) {
@@ -64,21 +65,6 @@ export function useCollection() {
 			setIsLoading(false);
 			console.log(err);
 		}
-
-		// setIsLoading(true);
-		// const collectionId = collectionData.id;
-		// return collectionService
-		// 	.updateCollection(collectionId, collectionData)
-		// 	.then((newCollection) => {
-		// 		let updatedCollection = collectionList.map((collection: Collection) => {
-		// 			if (collection.id == newCollection.id) return newCollection;
-		// 			else return collection;
-		// 		});
-		// 		setCollectionList(updatedCollection);
-		// 		return;
-		// 	})
-		// 	.catch((_error) => {})
-		// 	.finally(() => setIsLoading(true));
 	};
 
 	const deleteCollection = (collectionId: number) => {
@@ -86,7 +72,7 @@ export function useCollection() {
 		collectionService
 			.deleteCollection(collectionId)
 			.then((collections) => setCollectionList(collectionList.filter((collection: Collection) => collection.id !== collectionId)))
-			.catch((_error) => {})
+			.catch((_error) => { })
 			.finally(() => setIsLoading(false));
 	};
 
