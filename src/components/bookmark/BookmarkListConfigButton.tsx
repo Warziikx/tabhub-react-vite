@@ -1,5 +1,5 @@
 import { BookmarkViewMode, BookmarkViewModeDisplay } from "@/utils/interfaces/Bookmark";
-import { UnorderedListOutlined } from "@ant-design/icons"
+import { UnorderedListOutlined, AppstoreOutlined } from "@ant-design/icons"
 import { Button, Dropdown, Radio, RadioChangeEvent, Space, theme } from "antd"
 const { useToken } = theme;
 
@@ -24,6 +24,14 @@ export const BookmarkListConfigButton: React.FC<Props> = ({ viewMode, setViewMod
         setViewMode(e.target.value)
     }
 
+    const getIcon = () => {
+        if (viewMode === BookmarkViewMode.LISTE) {
+            return <UnorderedListOutlined />
+        } else if (viewMode === BookmarkViewMode.CARD) {
+            return <AppstoreOutlined />
+        }
+    }
+
 
     return (<Dropdown
         menu={{}}
@@ -32,8 +40,8 @@ export const BookmarkListConfigButton: React.FC<Props> = ({ viewMode, setViewMod
                 <p>Vue</p>
                 <Radio.Group value={viewMode} onChange={onViewModeChange}>
                     <Space direction="vertical">
-                        <Radio value={BookmarkViewMode.LISTE}>Liste</Radio>
-                        <Radio value={BookmarkViewMode.CARD}>Card</Radio>
+                        <Radio value={BookmarkViewMode.LISTE}><UnorderedListOutlined />&nbsp;Liste</Radio>
+                        <Radio value={BookmarkViewMode.CARD}><AppstoreOutlined />&nbsp;Card</Radio>
                     </Space>
                 </Radio.Group>
             </div>
@@ -41,7 +49,7 @@ export const BookmarkListConfigButton: React.FC<Props> = ({ viewMode, setViewMod
     >
         <Button onClick={(e) => e.preventDefault()}>
             <Space>
-                <UnorderedListOutlined />
+                {getIcon()}
                 {BookmarkViewModeDisplay[viewMode]}
             </Space>
         </Button>

@@ -10,7 +10,7 @@ import useCollectionContext from "@/lib/context/CollectionContext";
 import dayjs from "dayjs";
 import "dayjs/locale/fr";
 import { useBookmark } from "@/lib/hooks/bookmarkHook";
-import { PlusOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { BookmarkListConfigButton } from "./BookmarkListConfigButton";
 import { useState } from "react";
 import { BookmarkContextDropdrown } from "./BookmarkContextDropdown";
