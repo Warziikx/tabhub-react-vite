@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button, Form, Input, Typography } from 'antd';
 import { Link } from "react-router-dom";
 
-export const LoginForm: React.FC = () => {
+export const RegisterForm: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false)
     const { login } = useTabhubContext()
     const onSubmit = async (data: any) => {
@@ -38,19 +38,33 @@ export const LoginForm: React.FC = () => {
                 <Input.Password size="large" />
             </Form.Item>
 
-            {/* <Form.Item name="remember" valuePropName="checked" >
-                <Checkbox>Remember me</Checkbox>
-            </Form.Item> */}
-
+            <Form.Item
+                label="Confirmation Mot de passe"
+                name="password_confirm"
+                rules={[{
+                    required: true,
+                    message: 'Veuillez confirmer votre mot de passe ',
+                },
+                ({ getFieldValue }) => ({
+                    validator(_, value) {
+                        if (!value || getFieldValue('password') === value) {
+                            return Promise.resolve();
+                        }
+                        return Promise.reject(new Error('Les mots de passe que vous avez saisis ne correspondent pas '));
+                    },
+                }),]}
+            >
+                <Input.Password size="large" />
+            </Form.Item>
             <Form.Item >
                 <Button type="primary" htmlType="submit" block loading={isLoading} disabled={isLoading} size="large">
-                    Connexion
+                    Inscription
                 </Button>
             </Form.Item>
             <div style={{ textAlign: "center" }}>
                 <Typography.Text>
-                    Pas encore de compte ?&nbsp;
-                    <Link to={"/auth/register"}>Inscription</Link>
+                    Déjà un compte ?&nbsp;
+                    <Link to={"/auth/login"}>Connexion</Link>
                 </Typography.Text>
             </div>
         </Form>

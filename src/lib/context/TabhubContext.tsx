@@ -60,7 +60,6 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
 	// loading state is over.
 	async function login(objCredential: LoginProps) {
 		setLoading(true);
-
 		await authService
 			.login(objCredential)
 			.then((tokens: AuthToken) => {

@@ -1,6 +1,7 @@
 export interface Bookmark {
 	title: string;
 	description: string;
+	imagePath: string;
 	id: number;
 	link: string;
 	createdAt: Date;
