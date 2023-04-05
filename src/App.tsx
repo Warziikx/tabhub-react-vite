@@ -21,6 +21,7 @@ import { CollectionProvider } from "@/lib/context/CollectionContext";
 
 /* COMPONENTS */
 import { TabHubLayout } from "@/components/layout/TabhubLayout";
+import { ConfigProvider } from "antd";
 
 function Router() {
 	const { tokens } = useTabhubContext();
@@ -64,11 +65,14 @@ function Router() {
 
 function App() {
 	return (
-		<BrowserRouter>
-			<AuthProvider>
-				<Router />
-			</AuthProvider>
-		</BrowserRouter>
+		<ConfigProvider theme={{ token: { colorPrimary: '#91AE8D' } }}>
+			<BrowserRouter>
+				<AuthProvider>
+					<Router />
+				</AuthProvider>
+			</BrowserRouter>
+		</ConfigProvider>
+
 	);
 }
 
