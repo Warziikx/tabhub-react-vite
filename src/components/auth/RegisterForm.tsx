@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 
 export const RegisterForm: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false)
-    const { login } = useTabhubContext()
+    const { login, register } = useTabhubContext()
     const onSubmit = async (data: any) => {
         setIsLoading(true)
-        await login(data)
+        await register(data)
         setIsLoading(false)
     }
 
@@ -16,7 +16,6 @@ export const RegisterForm: React.FC = () => {
         <Form
             name="basic"
             layout="vertical"
-            style={{ maxWidth: 400 }}
             initialValues={{ remember: true }}
             onFinish={onSubmit}
             onFinishFailed={(errorInfo) => { console.log(errorInfo) }}

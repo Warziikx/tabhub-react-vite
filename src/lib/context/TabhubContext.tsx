@@ -4,16 +4,20 @@ import { useNavigate, useLocation } from "react-router-dom";
 import * as authService from "@/lib/services/authService";
 import * as userService from "@/lib/services/userService";
 import { APP_ROUTES } from "@/utils/constant";
-import { LoginProps, AuthToken } from "@/utils/interfaces/Auth";
+import { LoginProps, AuthToken, RegisterProps } from "@/utils/interfaces/Auth";
+
+import { notification } from "antd";
+import type { NotificationPlacement } from 'antd/es/notification/interface';
 
 interface AuthContextType {
 	user?: User;
 	tokens?: AuthToken;
 	loading: boolean;
-	error?: any;
+	_error?: Error;
 	login: (objCredential: LoginProps) => void;
 	// signUp: (email: string, name: string, password: string) => void;
 	logout: () => void;
+	setError: (error: Error) => void
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -24,14 +28,16 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
 	let token = localStorageToken != null && JSON.parse(localStorageToken);
 	const [user, setUser] = useState<User | undefined>();
 	const [tokens, setTokens] = useState<AuthToken | undefined>(token);
-	const [error, setError] = useState<any>();
+	const [_error, _setError] = useState<any>();
 	const [loading, setLoading] = useState<boolean>(false);
 	const [loadingInitial, setLoadingInitial] = useState<boolean>(false);
+
+	const [api, contextHolder] = notification.useNotification();
 
 	const navigate = useNavigate();
 	const location = useLocation();
 	useEffect(() => {
-		if (error) setError(null);
+		if (_error) _setError(null);
 	}, [location.pathname]);
 
 	useEffect(() => {
@@ -50,14 +56,6 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
 			.finally(() => setLoading(false));
 	}
 
-	// Flags the component loading state and posts the login
-	// data to the server.
-	//
-	// An error means that the email/password combination is
-	// not valid.
-	//
-	// Finally, just signal the component that loading the
-	// loading state is over.
 	async function login(objCredential: LoginProps) {
 		setLoading(true);
 		await authService
@@ -73,27 +71,27 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
 		navigate(APP_ROUTES.HOME);
 	}
 
-	// Sends sign up details to the server. On success we just apply
-	// the created user to the state.
-	// function signUp(email: string, name: string, password: string) {
-	//     setLoading(true);
+	async function register(objCredential: RegisterProps) {
+		setLoading(true);
+		await authService.register(objCredential)
+			.then(data => { })
+			.catch((error: Error) => setError(error))
+			.finally(() => setLoading(false));
+		navigate(APP_ROUTES.LOG_IN)
+	}
 
-	//     usersApi.signUp({ email, name, password })
-	//         .then((user) => {
-	//             setUser(user);
-	//             navigate("/");
-	//         })
-	//         .catch((error) => setError(error))
-	//         .finally(() => setLoading(false));
-	// }
-
-	// Call the logout endpoint and then remove the user
-	// from the state.
 	function logout() {
 		localStorage.removeItem("tokens");
 		setTokens(undefined);
 		setUser(undefined);
 		navigate(APP_ROUTES.LOG_IN);
+	}
+
+	function setError(_error: Error) {
+		api.info({
+			message: `Notification bottomRight`,
+			description: <AuthContext.Consumer>{() => `Hello!`}</AuthContext.Consumer>,
+		});
 	}
 
 	// Make the provider update only when it should.
@@ -110,17 +108,18 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
 			user,
 			tokens,
 			loading,
-			error,
+			_error,
 			login,
-			// signUp,
+			register,
 			logout,
+			setError
 		}),
-		[user, loading, error]
+		[user, loading, _error]
 	);
 
 	// We only want to render the underlying app after we
 	// assert for the presence of a current user.
-	return <AuthContext.Provider value={memoedValue}>{!loadingInitial && children}</AuthContext.Provider>;
+	return <AuthContext.Provider value={memoedValue}>{contextHolder}{!loadingInitial && children}</AuthContext.Provider>;
 }
 
 // Let's only export the `useAuth` hook instead of the context.

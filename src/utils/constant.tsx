@@ -4,6 +4,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 export const HOME_PAGE_KEY = 'HOME'
 export const API_ROUTES = {
 	LOG_IN: `${API_URL}/auth/login`,
+	REGISTER: `${API_URL}/auth/register`,
 	SIGN_IN: `${API_URL}/auth/signin`,
 	GET_ME: `${API_URL}/user/me`,
 	COLLECTION_LIST: `${API_URL}/collection`,

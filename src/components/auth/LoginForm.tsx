@@ -16,7 +16,6 @@ export const LoginForm: React.FC = () => {
         <Form
             name="basic"
             layout="vertical"
-            style={{ maxWidth: 400 }}
             initialValues={{ remember: true }}
             onFinish={onSubmit}
             onFinishFailed={(errorInfo) => { console.log(errorInfo) }}
@@ -27,7 +26,7 @@ export const LoginForm: React.FC = () => {
                 name="email"
                 rules={[{ required: true, message: 'Adresse email invalide', type: "email" }]}
             >
-                <Input size="large" />
+                <Input />
             </Form.Item>
 
             <Form.Item
@@ -35,7 +34,7 @@ export const LoginForm: React.FC = () => {
                 name="password"
                 rules={[{ required: true, message: 'Veuillez saisir votre mot de passe' }]}
             >
-                <Input.Password size="large" />
+                <Input.Password />
             </Form.Item>
 
             {/* <Form.Item name="remember" valuePropName="checked" >

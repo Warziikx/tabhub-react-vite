@@ -21,7 +21,7 @@ import { CollectionProvider } from "@/lib/context/CollectionContext";
 
 /* COMPONENTS */
 import { TabHubLayout } from "@/components/layout/TabhubLayout";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, notification } from "antd";
 
 function Router() {
 	const { tokens } = useTabhubContext();
@@ -64,11 +64,13 @@ function Router() {
 }
 
 function App() {
+	const [contextHolder] = notification.useNotification();
 	return (
 		<ConfigProvider theme={{ token: { colorPrimary: '#91AE8D' } }}>
 			<BrowserRouter>
 				<AuthProvider>
-					<Router />
+						<Router />
+
 				</AuthProvider>
 			</BrowserRouter>
 		</ConfigProvider>

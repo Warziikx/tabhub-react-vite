@@ -17,35 +17,26 @@ export const CollectionPage: React.FC = () => {
 	const { collection } = useCollectionContext();
 
 	const [isMounted, setIsMounted] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [localCollectionId, setLocalCollectionId] = useState<number | null>(null);
 
 	let { collectionId } = useParams();
 
 	useEffect(() => {
-		if (collectionId != null) {
-			let numberCollectionId = parseInt(collectionId);
-			if (numberCollectionId != localCollectionId) {
-				getCollection(numberCollectionId);
-				setLocalCollectionId(numberCollectionId);
+		if (isMounted) {
+			if (collectionId != null) {
+				let numberCollectionId = parseInt(collectionId);
+				if (numberCollectionId != localCollectionId) {
+					getCollection(numberCollectionId);
+					setLocalCollectionId(numberCollectionId);
+				}
 			}
 		}
 	}, [getCollection, collectionId]);
 
 	useEffect(() => {
 		if (!isMounted) {
-			if (collectionId != null) {
-				let numberCollectionId = parseInt(collectionId);
-				getCollection(numberCollectionId);
-				setLocalCollectionId(numberCollectionId);
-			} else {
-				navigate(APP_ROUTES.HOME);
-			}
-			setIsMounted(true);
-		}
-	}, [isMounted, setIsMounted, getCollection, collectionId]);
 
-	useEffect(() => {
-		if (!isMounted) {
 			if (collectionId != null) {
 				let numberCollectionId = parseInt(collectionId);
 				getCollection(numberCollectionId);
@@ -55,7 +46,7 @@ export const CollectionPage: React.FC = () => {
 			}
 			setIsMounted(true);
 		}
-	}, [isMounted, setIsMounted, getCollection, collectionId]);
+	}, [isMounted]);
 
 	const buildBreadcrumbItems = (collection: Collection, level: number): any => {
 		return <>

@@ -3,10 +3,12 @@ import { useState, useEffect } from "react";
 import * as collectionService from "@/lib/services/collectionService";
 
 import useCollectionContext from "@/lib/context/CollectionContext";
+import useTabhubContext from "@/lib/context/TabhubContext";
 
 export function useCollection() {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { collectionList, setCollectionList, collection, setCollection } = useCollectionContext();
+	const { setError } = useTabhubContext()
 
 	const getCollectionList = () => {
 		setIsLoading(true);
@@ -22,7 +24,7 @@ export function useCollection() {
 		collectionService
 			.getCollection(collectionId)
 			.then((collections) => setCollection(collections))
-			.catch((_error) => { })
+			.catch((_error) => { setError(_error) })
 			.finally(() => setIsLoading(false));
 	};
 
