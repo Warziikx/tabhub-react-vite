@@ -27,7 +27,7 @@ export const CollectionModalForm: React.FC = () => {
 	};
 	return (
 		<Modal title={currentContextCollection ? "Modifier une collection" : "Créer une collection"} open={isModalCollectionFormOpen} onOk={form.submit} onCancel={handleCancel}>
-			<CollectionForm form={form} submitCallback={onSubmit} />
+			{isModalCollectionFormOpen && <CollectionForm form={form} submitCallback={onSubmit} />}
 		</Modal>
 	);
 };

@@ -17,14 +17,14 @@ export const CollectionPage: React.FC = () => {
 	const { collection } = useCollectionContext();
 
 	const [isMounted, setIsMounted] = useState<boolean>(false);
-	const [isLoading, setIsLoading] = useState<boolean>(false);
+	//const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [localCollectionId, setLocalCollectionId] = useState<number | null>(null);
 
 	let { collectionId } = useParams();
 
 	useEffect(() => {
 		if (isMounted) {
-			if (collectionId != null) {
+			if (collectionId != null && !isNaN(parseInt(collectionId))) {
 				let numberCollectionId = parseInt(collectionId);
 				if (numberCollectionId != localCollectionId) {
 					getCollection(numberCollectionId);
@@ -36,8 +36,7 @@ export const CollectionPage: React.FC = () => {
 
 	useEffect(() => {
 		if (!isMounted) {
-
-			if (collectionId != null) {
+			if (collectionId != null && !isNaN(parseInt(collectionId))) {
 				let numberCollectionId = parseInt(collectionId);
 				getCollection(numberCollectionId);
 				setLocalCollectionId(numberCollectionId);
@@ -69,12 +68,6 @@ export const CollectionPage: React.FC = () => {
 				<div style={{ marginBottom: "30px" }}>
 					<Breadcrumb separator=">">
 						{buildBreadcrumbItems(collection, 0)}
-						{/* <Breadcrumb.Item href="#" onClick={() => { navigate(`${APP_ROUTES.COLLECTION}${collection.parent?.id}`) }}>
-							{collection.parent.icon}
-							<span style={{ marginLeft: 4 }}>{collection.parent.name}</span>
-						</Breadcrumb.Item>
-						<Breadcrumb.Item>
-							<span style={{ marginLeft: 4 }}>{collection.name}</span></Breadcrumb.Item> */}
 					</Breadcrumb>
 				</div>
 			)}

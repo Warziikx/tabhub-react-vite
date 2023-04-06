@@ -50,7 +50,7 @@ export const CollectionForm: React.FC<CollectionFormProps> = ({ form, submitCall
 			getCollectionList();
 			setIsMounted(true);
 		}
-	}, [isMounted, setIsMounted, getCollectionList]);
+	}, [isMounted, setIsMounted]);
 
 
 	const buildTreeData = (collections: Array<Collection>): Array<MyTreeSelectDataProps> => {

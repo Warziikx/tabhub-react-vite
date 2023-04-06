@@ -17,6 +17,9 @@ export const API_ROUTES = {
 	BOOKMARK_CREATE: `${API_URL}/bookmark`,
 	BOOKMARK_UPDATE: `${API_URL}/bookmark`,
 	BOOKMARK_DELETE: `${API_URL}/bookmark`,
+
+
+	FILE_CREATE: `${API_URL}/file`,
 };
 
 export const APP_ROUTES = {

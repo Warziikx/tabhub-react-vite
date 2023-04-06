@@ -38,6 +38,7 @@ export const CollectionList: React.FC<CollectionListPros> = ({ collectionList })
 			{collectionList.map((collection: Collection) => {
 				return (
 					<Dropdown
+						key={collection.id}
 						menu={{ items }}
 						trigger={["contextMenu"]}
 						onOpenChange={(isOpen) => {

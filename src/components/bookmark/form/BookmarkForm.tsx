@@ -5,6 +5,7 @@ import { useEffect } from "react";
 
 import { useBookmark } from "@/lib/hooks/bookmarkHook";
 import useCollectionContext from "@/lib/context/CollectionContext";
+import { ThImageUpload } from "@/components/form/ThImageUpload";
 
 interface BookmarkFormProps {
 	form: FormInstance;
@@ -41,6 +42,9 @@ export const BookmarkForm: React.FC<BookmarkFormProps> = ({ form, submitCallback
 			{
 				currentContextBookmark != null &&
 				<>
+					<Form.Item label="Image" name="imagePath" >
+						<ThImageUpload />
+					</Form.Item>
 					<Form.Item label="Title" name="title" rules={[{ required: true, message: "Veuillez saisir un titre pour votre bookmark" }]}>
 						<Input />
 					</Form.Item>

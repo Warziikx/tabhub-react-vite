@@ -88,9 +88,10 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
 	}
 
 	function setError(_error: Error) {
-		api.info({
-			message: `Notification bottomRight`,
-			description: <AuthContext.Consumer>{() => `Hello!`}</AuthContext.Consumer>,
+		api.error({
+			message: `Une erreur s'est produite`,
+			description: <AuthContext.Consumer>{() => `${_error.message}`}</AuthContext.Consumer>,
+			placement: "bottomRight"
 		});
 	}
 
