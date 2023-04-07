@@ -8,17 +8,30 @@ import axios from "axios";
 // }
 
 export async function createBookmark(bookmarkData: Bookmark): Promise<Bookmark> {
-	const reponse = await axios.post(`${API_ROUTES.BOOKMARK_CREATE}`, bookmarkData);
+	const reponse = await axios.post(
+		`${API_ROUTES.BOOKMARK_CREATE}`,
+		bookmarkData
+	);
 	return reponse.data.data;
 }
 
 export async function updateBookmark(bookmarkId: number, bookmarkData: Bookmark): Promise<Bookmark> {
 	/* On remove l'ID */
-	const reponse = await axios.put(`${API_ROUTES.BOOKMARK_UPDATE}/${bookmarkId}`, { title: bookmarkData.title, link: bookmarkData.link });
+	const reponse = await axios.put(
+		`${API_ROUTES.BOOKMARK_UPDATE}/${bookmarkId}`,
+		{
+			title: bookmarkData.title,
+			link: bookmarkData.link,
+			description: bookmarkData.description,
+			imagePath: bookmarkData.imagePath
+		}
+	);
 	return reponse.data.data;
 }
 
 export async function deleteBookmark(bookmarkId: number): Promise<Bookmark> {
-	const reponse = await axios.delete(`${API_ROUTES.BOOKMARK_DELETE}/${bookmarkId}`);
+	const reponse = await axios.delete(
+		`${API_ROUTES.BOOKMARK_DELETE}/${bookmarkId}`
+	);
 	return reponse.data.data;
 }

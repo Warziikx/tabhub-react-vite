@@ -1,12 +1,13 @@
 import axios from 'axios'
 import { API_ROUTES, APP_ROUTES } from './constant'
+import { AuthToken } from "@/utils/interfaces/Auth";
 
 axios.interceptors.request.use(function (config) {
   const token = localStorage.getItem('tokens')
   //const token = store.getState().auth.token
   if (token && config.headers.shouldPutToken !== false) {
-    const tokenParsed = JSON.parse(token).token
-    config.headers.Authorization = `Bearer ${tokenParsed}`
+    const tokenParsed: AuthToken = JSON.parse(token)
+    config.headers.Authorization = `Bearer ${tokenParsed.accessToken}`
   }
 
   return config

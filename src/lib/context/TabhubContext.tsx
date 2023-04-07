@@ -26,6 +26,7 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 export function AuthProvider({ children }: { children: ReactNode }): JSX.Element {
 	let localStorageToken = localStorage.getItem("tokens");
 	let token = localStorageToken != null && JSON.parse(localStorageToken);
+
 	const [user, setUser] = useState<User | undefined>();
 	const [tokens, setTokens] = useState<AuthToken | undefined>(token);
 	const [_error, _setError] = useState<any>();
@@ -36,6 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
 
 	const navigate = useNavigate();
 	const location = useLocation();
+
 	useEffect(() => {
 		if (_error) _setError(null);
 	}, [location.pathname]);
@@ -95,15 +97,6 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
 		});
 	}
 
-	// Make the provider update only when it should.
-	// We only want to force re-renders if the user,
-	// loading or error states change.
-	//
-	// Whenever the `value` passed into a provider changes,
-	// the whole tree under the provider re-renders, and
-	// that can be very costly! Even in this case, where
-	// you only get re-renders when logging in and out
-	// we want to keep things very performant.
 	const memoedValue = useMemo(
 		() => ({
 			user,

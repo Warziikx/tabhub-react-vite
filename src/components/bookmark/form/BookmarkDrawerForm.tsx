@@ -8,8 +8,13 @@ export const BookmarkDrawerForm: React.FC = () => {
     const { isDrawerBookmarkFormOpen, setIsDrawerBookmarkFormOpen, currentContextBookmark } = useCollectionContext();
     const [form] = Form.useForm();
 
+
     useEffect(() => {
-        currentContextBookmark != null && form.setFieldsValue(currentContextBookmark);
+        if (currentContextBookmark != null) {
+            form.setFieldsValue(currentContextBookmark);
+            form.setFieldValue('imagePath', [{ uid: currentContextBookmark.imagePath, name: currentContextBookmark.imagePath, percent: 100, thumbUrl: currentContextBookmark.imageLink, type: "image/jpeg" }])
+        }
+
     }, [form, currentContextBookmark]);
 
     const onSubmit = () => {

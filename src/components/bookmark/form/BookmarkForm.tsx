@@ -1,7 +1,7 @@
 //import { tryCreate, tryUpdate } from '@/stores/bookmark';
 
-import { Form, FormInstance, Input } from "antd";
-import { useEffect } from "react";
+import { Form, FormInstance, Input, UploadFile } from "antd";
+import { useEffect, useState } from "react";
 
 import { useBookmark } from "@/lib/hooks/bookmarkHook";
 import useCollectionContext from "@/lib/context/CollectionContext";
@@ -15,13 +15,25 @@ interface BookmarkFormProps {
 export const BookmarkForm: React.FC<BookmarkFormProps> = ({ form, submitCallback }) => {
 	const { currentContextBookmark } = useCollectionContext();
 	const { createBookmark, updateBookmark } = useBookmark();
-	const linkValue = Form.useWatch('link', form);
+
 
 	const onSubmit = async (data: any) => {
+		if (data.imagePath) {
+			let uniqueImage = data.imagePath.filter((d: any, i: number) => i === 0)[0]
+			data.imagePath = uniqueImage.response ? uniqueImage.response.filePath : uniqueImage.name
+		}
 		if (data.id === undefined) await createBookmark(data);
 		else await updateBookmark(data);
 		form.resetFields();
 		submitCallback();
+	};
+
+	const fileUpload = (e: any) => {
+		//console.log('Upload event:', e);
+		if (Array.isArray(e)) {
+			return e;
+		}
+		return e?.fileList;
 	};
 	return (
 		<Form
@@ -42,8 +54,11 @@ export const BookmarkForm: React.FC<BookmarkFormProps> = ({ form, submitCallback
 			{
 				currentContextBookmark != null &&
 				<>
-					<Form.Item label="Image" name="imagePath" >
-						<ThImageUpload />
+					<Form.Item label="Image" name="imagePath" getValueFromEvent={fileUpload}>
+						<ThImageUpload maxCount={1} multiple={false} />
+					</Form.Item>
+					<Form.Item hidden={true} name="imageLink">
+						<Input />
 					</Form.Item>
 					<Form.Item label="Title" name="title" rules={[{ required: true, message: "Veuillez saisir un titre pour votre bookmark" }]}>
 						<Input />

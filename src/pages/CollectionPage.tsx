@@ -16,6 +16,7 @@ export const CollectionPage: React.FC = () => {
 	const { getCollection } = useCollection();
 	const { collection } = useCollectionContext();
 
+	const { isDrawerBookmarkFormOpen } = useCollectionContext();
 	const [isMounted, setIsMounted] = useState<boolean>(false);
 	//const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [localCollectionId, setLocalCollectionId] = useState<number | null>(null);
@@ -79,7 +80,7 @@ export const CollectionPage: React.FC = () => {
 				</div>
 			)}
 			{collection && <BookmarkList collection={collection} bookmarks={collection.bookmarks} />}
-			<BookmarkDrawerForm />
+			{isDrawerBookmarkFormOpen && <BookmarkDrawerForm />}
 		</div>
 	);
 };

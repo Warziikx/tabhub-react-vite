@@ -82,7 +82,7 @@ export const BookmarkList: React.FC<BookmarkListProps> = ({ bookmarks, collectio
 									}}
 									style={{ cursor: "pointer" }}
 								>
-									<List.Item.Meta avatar={<img style={{ width: 82, height: 52 }} src={item.imagePath} />} title={item.title} description={item.description} />
+									<List.Item.Meta avatar={<img style={{ width: 82, height: 52 }} src={item.imageLink} />} title={item.title} description={item.description} />
 									<Typography.Text>{dayjs(item.createdAt).format("DD MMMM YYYY")}</Typography.Text>
 								</StyledListItem>
 							</BookmarkContextDropdrown>
@@ -105,7 +105,7 @@ export const BookmarkList: React.FC<BookmarkListProps> = ({ bookmarks, collectio
 										onMouseDown={(event: any) => {
 											openLinkMiddleClick(event, item.link);
 										}}
-										cover={<img src={item.imagePath} />}
+										cover={<img src={item.imageLink} />}
 									>
 										<Card.Meta
 											title={item.title}
