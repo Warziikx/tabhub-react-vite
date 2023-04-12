@@ -13,12 +13,11 @@ import { CollectionList } from "@/components/collection/CollectionList";
 
 export const CollectionPage: React.FC = () => {
 	const navigate = useNavigate();
-	const { getCollection } = useCollection();
+	const { getCollection, isLoading } = useCollection();
 	const { collection } = useCollectionContext();
 
 	const { isDrawerBookmarkFormOpen } = useCollectionContext();
 	const [isMounted, setIsMounted] = useState<boolean>(false);
-	//const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [localCollectionId, setLocalCollectionId] = useState<number | null>(null);
 
 	let { collectionId } = useParams();
@@ -28,8 +27,9 @@ export const CollectionPage: React.FC = () => {
 			if (collectionId != null && !isNaN(parseInt(collectionId))) {
 				let numberCollectionId = parseInt(collectionId);
 				if (numberCollectionId != localCollectionId) {
-					getCollection(numberCollectionId);
+					getCollection(numberCollectionId)
 					setLocalCollectionId(numberCollectionId);
+
 				}
 			}
 		}
@@ -50,7 +50,7 @@ export const CollectionPage: React.FC = () => {
 
 	const buildBreadcrumbItems = (collection: Collection, level: number): any => {
 		return <>
-			{collection.parent && buildBreadcrumbItems(collection.parent, level + 1)}
+			{!isLoading && collection.parent && buildBreadcrumbItems(collection.parent, level + 1)}
 			{level > 0 ? (
 				<Breadcrumb.Item href="#" onClick={() => { navigate(`${APP_ROUTES.COLLECTION}${collection?.id}`) }}>
 					{collection.icon}
@@ -65,21 +65,21 @@ export const CollectionPage: React.FC = () => {
 
 	return (
 		<div>
-			{collection && collection.parent && (
+			{!isLoading && collection && collection.parent && (
 				<div style={{ marginBottom: "30px" }}>
 					<Breadcrumb separator=">">
 						{buildBreadcrumbItems(collection, 0)}
 					</Breadcrumb>
 				</div>
 			)}
-			{collection && collection.children && collection.children?.length > 0 && (
+			{!isLoading && collection && collection.children && collection.children?.length > 0 && (
 				<div style={{ marginBottom: "30px" }}>
 					<Typography.Title level={4}>Sous-Collection</Typography.Title>
 					<Divider style={{ marginBottom: "20px", marginTop: "0" }} />
 					<CollectionList collectionList={collection.children} />
 				</div>
 			)}
-			{collection && <BookmarkList collection={collection} bookmarks={collection.bookmarks} />}
+			{collection && <BookmarkList collection={collection} bookmarks={collection.bookmarks} isLoading={isLoading} />}
 			{isDrawerBookmarkFormOpen && <BookmarkDrawerForm />}
 		</div>
 	);

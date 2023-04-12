@@ -4,7 +4,7 @@ import logoIcon from '@/assets/logo-icon.svg';
 import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, LogoutOutlined, PlusOutlined, BlockOutlined, LinkOutlined } from "@ant-design/icons";
-import { Layout, Menu, theme, Typography, Avatar, Dropdown, FloatButton, MenuProps } from "antd";
+import { Layout, Menu, theme, Typography, Avatar, Dropdown, FloatButton, MenuProps, Divider } from "antd";
 // import { openModalCollectionForm } from '@store/app';
 
 import { CollectionListMenu } from "../collection/CollectionListMenu";
@@ -16,7 +16,7 @@ import { BookmarkModalForm } from "../bookmark/form/BookmarkModalForm";
 const { Header, Content, Sider } = Layout;
 
 export const TabHubLayout: React.FC = () => {
-	const { setIsModalCollectionFormOpen, setIsModalBookmarkFormOpen, setCurrentContextBookmark } = useCollectionContext();
+	const { setIsModalCollectionFormOpen, setIsModalBookmarkFormOpen, setCurrentContextBookmark, setCurrentContextCollection } = useCollectionContext();
 	const { user, logout } = useTabhubContext();
 	const [collapsed, setCollapsed] = useState(false);
 	const { token: { colorBgContainer } } = theme.useToken();
@@ -34,6 +34,16 @@ export const TabHubLayout: React.FC = () => {
 			onClick: logout,
 		},
 	];
+
+	const createCollection = () => {
+		setCurrentContextCollection(null)
+		setIsModalCollectionFormOpen(true)
+	}
+
+	const createBookmark = () => {
+		setCurrentContextBookmark(null);
+		setIsModalBookmarkFormOpen(true);
+	}
 
 	return (
 		<Layout style={{ minHeight: "100vh" }}>
@@ -69,8 +79,8 @@ export const TabHubLayout: React.FC = () => {
 				</Content>
 			</Layout>
 			<FloatButton.Group trigger="hover" type="primary" icon={<PlusOutlined />}>
-				<FloatButton icon={<LinkOutlined />} onClick={() => { setCurrentContextBookmark(null); setIsModalBookmarkFormOpen(true); }} tooltip={<div>Ajouter un lien</div>} />
-				<FloatButton icon={<BlockOutlined />} onClick={() => setIsModalCollectionFormOpen(true)} tooltip={<div>Ajouter une collection</div>} />
+				<FloatButton icon={<LinkOutlined />} onClick={createBookmark} tooltip={<div>Ajouter un lien</div>} />
+				<FloatButton icon={<BlockOutlined />} onClick={createCollection} tooltip={<div>Ajouter une collection</div>} />
 			</FloatButton.Group>
 			<CollectionModalForm />
 			<BookmarkModalForm />

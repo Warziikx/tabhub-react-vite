@@ -17,7 +17,7 @@ export function useCollection() {
 			.getCollectionList()
 			.then((collections) => setCollectionList(collections))
 			.catch((_error) => { })
-			.finally(() => setIsLoading(false));
+			.finally(() => { setIsLoading(false) });
 	};
 
 	const getCollection = (collectionId: number) => {
@@ -28,7 +28,7 @@ export function useCollection() {
 			.catch((_error) => {
 				setError(_error);
 			})
-			.finally(() => setIsLoading(false));
+			.finally(() => { setIsLoading(false) });
 	};
 
 	const getCollectionByType = (collectionType: string) => {

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
+import frFR from 'antd/locale/fr_FR';
+
 import { BrowserRouter, Routes, Route, Navigate, RouteProps } from "react-router-dom";
 import "@/utils/axiosInterceptor";
 import "antd/dist/reset.css";
@@ -7,6 +7,7 @@ import "./App.css";
 
 /* PAGES */
 import { Accueil } from "@/pages/Accueil";
+import { Trash } from "@/pages/Trash";
 import { CollectionPage } from "@/pages/CollectionPage";
 import { Login } from "@/pages/auth/Login";
 import { Register } from "@/pages/auth/Register";
@@ -47,6 +48,7 @@ function Router() {
 			>
 				<Route index element={<Accueil />} />
 				<Route path="collection/:collectionId" element={<CollectionPage />} />
+				<Route path={APP_ROUTES.TRASH} element={<Trash />} />
 			</Route>
 
 			<Route
@@ -66,10 +68,10 @@ function Router() {
 function App() {
 	const [contextHolder] = notification.useNotification();
 	return (
-		<ConfigProvider theme={{ token: { colorPrimary: '#91AE8D' } }}>
+		<ConfigProvider theme={{ token: { colorPrimary: '#91AE8D' } }} locale={frFR}>
 			<BrowserRouter>
 				<AuthProvider>
-						<Router />
+					<Router />
 
 				</AuthProvider>
 			</BrowserRouter>

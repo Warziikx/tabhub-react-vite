@@ -2,6 +2,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 
 export const HOME_PAGE_KEY = 'HOME'
+export const TRASH_PAGE_KEY = 'TRASH'
 export const API_ROUTES = {
 	LOG_IN: `${API_URL}/auth/login`,
 	REGISTER: `${API_URL}/auth/register`,
@@ -26,5 +27,6 @@ export const APP_ROUTES = {
 	LOG_IN: "/auth/login",
 	REGISTER: "/auth/register",
 	HOME: "/",
-	COLLECTION: "/collection/"
+	COLLECTION: "/collection/",
+	TRASH: "/trash"
 };
