@@ -15,6 +15,7 @@ interface AuthContextType {
 	loading: boolean;
 	_error?: Error;
 	login: (objCredential: LoginProps) => void;
+	register: (objCredential: RegisterProps) => void;
 	// signUp: (email: string, name: string, password: string) => void;
 	logout: () => void;
 	setError: (error: Error) => void

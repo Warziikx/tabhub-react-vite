@@ -8,7 +8,7 @@ import { BookmarkDrawerForm } from "@/components/bookmark/form/BookmarkDrawerFor
 
 export const Trash: React.FC = () => {
     const { collection } = useCollectionContext();
-    const { getCollectionByType } = useCollection();
+    const { getCollectionByType, isLoading } = useCollection();
 
     const [isMounted, setIsMounted] = useState<boolean>(false);
 
@@ -25,7 +25,7 @@ export const Trash: React.FC = () => {
     return (
         <Row>
             <Col span={24}>
-                {collection && <BookmarkList collection={collection} bookmarks={collection.bookmarks} />}
+                {collection && <BookmarkList collection={collection} bookmarks={collection.bookmarks} isLoading={isLoading} />}
             </Col>
             <BookmarkDrawerForm />
         </Row>

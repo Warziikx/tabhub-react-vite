@@ -11,6 +11,7 @@ import { useCollection } from "@/lib/hooks/collectionHook";
 import useCollectionContext from "@/lib/context/CollectionContext";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { APP_ROUTES, HOME_PAGE_KEY, TRASH_PAGE_KEY } from "@/utils/constant";
+import { ItemType } from "antd/es/menu/hooks/useItems";
 
 export const CollectionListMenu: React.FC = ({ }) => {
 	const navigate = useNavigate();
@@ -59,7 +60,7 @@ export const CollectionListMenu: React.FC = ({ }) => {
 		return key;
 	}
 
-	const formatuseCollectionToMenuItems = () => {
+	const formatuseCollectionToMenuItems = (): ItemType[] => {
 		return [
 			{
 				key: HOME_PAGE_KEY, label: "Accueil", icon: <HomeAlt width="16" style={{ verticalAlign: "middle" }} />, onClick: () => {
